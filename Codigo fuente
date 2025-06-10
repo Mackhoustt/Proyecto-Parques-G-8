@@ -1,0 +1,41 @@
+#PRIMER AVANCE
+
+
+#Tablero
+tablero = [[] for _ in range(68)] #
+casillas_seguras = [5,12,22,29,39,46,56,63]
+#Variebles para equipos/colores
+EQUIPOS = {
+    "rojo": {
+        "fichas_en_juego": [],
+        "carcel": ["rojo1", "rojo2", "rojo3", "rojo4"], #La posición inical de la fichas es en la carcel
+        "salida": 5,
+        "llegada": 60, # Casilla de entrada a la zona interna
+        "internas": [[] for _ in range(8)],
+        "meta": []
+    },
+    "amarillo": {
+        "fichas_en_juego": [],
+        "carcel": ["amarillo1", "amarillo2", "amarillo3", "amarillo4"],
+        "salida": 22,
+        "llegada": 13,
+        "internas": [[] for _ in range(8)],
+        "meta": []
+    },
+    "azul": {
+        "fichas_en_juego": [],
+        "carcel": ["azul1", "azul2", "azul3", "azul4"],
+        "salida": 39,
+        "llegada": 30,
+        "internas": [[] for _ in range(8)],
+        "meta": []
+    },
+    "verde": {
+        "fichas_en_juego": [],
+        "carcel": ["verde1", "verde2", "verde3", "verde4"],
+        "salida": 56,
+        "llegada": 47,
+        "internas": [[] for _ in range(8)],
+        "meta": []
+    }
+}
