@@ -1,23 +1,27 @@
-
+# Proyecto final Programación de computadores
+#22   Grupo 8         GARCÍA CASTAÑEDA, MARÍA JOSÉ   margarciacas@unal.edu.co
+#23   Grupo 8     Moreno Meléndez, Mackling Javier     mamorenome@unal.edu.co
+#Librerías
 import time
 import random
 #TABLERO
 Casillas_Tab=68
 Casillas_Lle=8
 Llegada=4
-Colores={"Rojas","Amarillas","Verdes","Azules"}
+Colores={"Rojas","Amarilas","Verdes","Azules"}
 Salidas={"Rojas":4,"Amarilas":21,"Verdes":38,"Azules":55}
 seguros={"Rojas":[4,11],"Amarilas":[21,28],"Verdes":[38,45],"Azules":[55,62]}
 Celdas_seg=set([4,11,21,28,38,45,55,62]) #  SET crea una estructura de datos optimizada para comprobar rápidamente si una celda específica es una "celda segura" sin tener que recorrer toda la lista cada vez. Es ideal para situaciones donde necesitas saber si un elemento "está o no está" en una colección de forma eficiente.
 Seg_llegada={"Rojas":67,"Amarilas":16,"Verdes":33,"Azules":50}
+#Funcion para definir modo de juego
 yes_or_no=input("inserte y/n")
 def modo_real(yes_or_no):  
-      if yes_or_no=='y':
+      if yes_or_no=='y': #si la respuesta es 'y' se jugara con los dados de set random
         modo_real == True
-      elif yes_or_no=='n':
+      elif yes_or_no=='n': #si la respuesta es 'n' se jugara en modo programador
         modo_real == False
-
 #ELEMENTOS INDEPENDIENTES
+#La función Self para guardar la información dentro de un atributo en el codigo, servirá como un creador de listas con atributos en común
 class Ficha:
   def __init__(self,equipo,id):
     self.equipo=equipo # Identifica el color del equipo al que pertenece la ficha
@@ -25,7 +29,7 @@ class Ficha:
     self.zona="Carcel" # Zona actual donde se ubica la ficha (carcel, externo, interno y casa), todas la fichas inician en la carcel.
     self.posicion=None # Número de casilla/posición (externo número de casilla, interno indice dentro del pasillo o None si se encuentra en la carcel o meta)
   def __repr__(self): # Define como será representado el elemento
-    return f"{self.equipo[0].upper()}{self.id}" # Devuelve una cadena de texto como "A0", "V1", "R2", etc., donde la primera letra es la inicial del color del equipo en mayúscula y el número es el id de la ficha.
+    return  f"{self.equipo[0].upper()}{self.equipo[1].upper()}{self.id}" # Devuelve una cadena de texto como "AZ0", "VE1", "RO2", etc., donde la primera letra es la inicial del color del equipo en mayúscula y el número es el id de la ficha.
 class Equipo:
   def __init__(self,color):
     self.color=color # Guarda el color del equipo
@@ -75,7 +79,7 @@ class Tablero:
 class Juego:
   def __init__(self, orden_turno):
     self.orden_turno=[] # Crea una lista que determina el orden de juego de los equipos
-    referencia={"R":"Rojas","A":"Amarillas","V":"Verdes","A":"Azules"} # Cada letra de la cadena la convierte a su color/equipo en referencia
+    referencia={"R":"Rojas","AM":"Amarilas","V":"Verdes","A":"Azules"} # Cada letra de la cadena la convierte a su color/equipo en referencia
     for i in orden_turno.upper(): # Crea la secuencia de turnos
       if i in referencia:
         self.orden_turno.append(referencia[i])
@@ -110,7 +114,7 @@ class Juego:
     else:
         d1 = int(input("Introduce el primer dado: "))
         d2 = int(input("Introduce el segundo dado: "))
-        return self.tirar_dados(d1,d2)
+        return self.tirar_dados()
   
   def salir_de_carcel(self,nums): # Retorna True si alguno de los dados fue un 5.Así una de las fichas del equipo podra salir de cárcel
     return 5 in nums
@@ -285,25 +289,29 @@ class Juego:
         return
     self.seleccionar_y_mover_ficha(equipo_actual,total)
     self.siguiente_turno(turno_extra) # Llama el siguiente turno
-  def seleccionar_y_mover_ficha(self,equipo,pasos): # Permite al usuario seleccionar y mover una ficha
-    movibles=equipo.fichas_movibles()
+  def seleccionar_y_mover_ficha(self, equipo, pasos): 
+    movibles = equipo.fichas_movibles()
     if not movibles:
-      print("No hay movimientos posibles.")
-      return
-    print("Fichas movibles:",movibles) # Muestra las fichas disponibles para mover
+        print("No hay movimientos posibles.")
+        return
+    print("Fichas movibles:", [f"{ficha}" for ficha in movibles])  # Mostrar las fichas movibles
+
     try:
-      ficha_id=int(input("Seleccione el id de la ficha que desea mover:")) # Solicita al ususario selccionar la ficha a mover por medio del id
-    except:
-      print("Entrada inválida. Se omite el turno.")
-      return
-    ficha=next((i for i in movibles if i.id==ficha_id),None)
+        ficha_id = int(input("Seleccione el id de la ficha que desea mover:"))  # Solicita al usuario seleccionar la ficha por el ID
+    except ValueError:
+        print("Entrada inválida. Se omite el turno.")
+        return
+
+    ficha = next((ficha for ficha in movibles if ficha.id == ficha_id), None)
+    
     if ficha is None:
-      print("Ficha no encontrada. Se omite el turno.")
-      return
-    if ficha.zona=="Externa":
-      self.mover_ficha_externa(equipo,ficha,pasos) # Llama la función de movimiento según la zona en la que se encuentre la ficha
-    elif ficha.zona=="Interna":
-      self.mover_ficha_interna(equipo,ficha,pasos)
+        print("Ficha no encontrada. Se omite el turno.")
+        return
+    
+    if ficha.zona == "Externa":
+        self.mover_ficha_externa(equipo, ficha, pasos)  # Llama a la función de mover ficha externa
+    elif ficha.zona == "Interna":
+        self.mover_ficha_interna(equipo, ficha, pasos)  # Llama a la función de mover ficha interna
   def siguiente_turno(self,turno_extra=False): # Avanza al turno al siguiente equipo, salvo si hay un turno extra
     if not turno_extra:
       self.indice_turno=(self.indice_turno+1)%len(self.orden_turno)
@@ -327,5 +335,7 @@ class Juego:
       time.sleep(0.1) # Añade un pequeño retardo en la impresión
     print("La partida a terminado ¡Gracias por jugar!")
 if __name__ == "__main__":
+    juego = Juego("RAVAM") # Inicia la clase de juego
+    juego.iniciar() # Llama el método para iniciar al instancia
     juego = Juego("RAVA") # Inicia la clase de juego
     juego.iniciar() # Llama el método para iniciar al instancia
