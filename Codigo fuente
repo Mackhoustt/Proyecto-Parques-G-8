@@ -1,3 +1,4 @@
+
 import time
 import random
 #TABLERO
@@ -10,13 +11,11 @@ seguros={"Rojas":[4,11],"Amarilas":[21,28],"Verdes":[38,45],"Azules":[55,62]}
 Celdas_seg=set([4,11,21,28,38,45,55,62]) #  SET crea una estructura de datos optimizada para comprobar rápidamente si una celda específica es una "celda segura" sin tener que recorrer toda la lista cada vez. Es ideal para situaciones donde necesitas saber si un elemento "está o no está" en una colección de forma eficiente.
 Seg_llegada={"Rojas":67,"Amarilas":16,"Verdes":33,"Azules":50}
 yes_or_no=input("inserte y/n")
-def modo_real():  
+def modo_real(yes_or_no):  
       if yes_or_no=='y':
-        modo_real = True
+        modo_real == True
       elif yes_or_no=='n':
-        modo_real = False
-modo_real()
-   
+        modo_real == False
 
 #ELEMENTOS INDEPENDIENTES
 class Ficha:
@@ -89,19 +88,19 @@ class Juego:
     self.movimientos_adicionales={} # Guarda movimientos extra
     self.conteo_pares={color:0 for color in Colores}
   def tirar_dados(self):
-    if modo_real == True:
+    if yes_or_no=='y':
         d1 = random.randint(1, 6)
         d2 = random.randint(1, 6)
         print(f"DADOS: {d1} y {d2}")
         return d1, d2
-    else:
+    elif yes_or_no=='n':
         d1 = int(input("Introduce el primer dado: "))
         d2 = int(input("Introduce el segundo dado: "))
         return d1, d2
 
   def iniciar_partida(self, color_equipo):  # Solicita al usuario que ingrese el comando o de contrario perderá el turno
     print(f"\nTurno de {color_equipo.upper()}")
-    if modo_real==True:
+    if yes_or_no=='y':
         incio_tiro = input("Escribe 'GO' para iniciar lanzar los dados: ").strip().upper()
         if incio_tiro == "GO":
             return self.tirar_dados()
@@ -111,7 +110,7 @@ class Juego:
     else:
         d1 = int(input("Introduce el primer dado: "))
         d2 = int(input("Introduce el segundo dado: "))
-        return self.tirar_dados()
+        return self.tirar_dados(d1,d2)
   
   def salir_de_carcel(self,nums): # Retorna True si alguno de los dados fue un 5.Así una de las fichas del equipo podra salir de cárcel
     return 5 in nums
